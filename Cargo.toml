@@ -1,0 +1,8 @@
+[package]
+name = "spacetoken"
+version = "0.1.0"
+edition = "2021"
+description = "simple proc-macro like tokenizer and parser, with space location awareness"
+
+[dependencies]
+logos = "0.13"
