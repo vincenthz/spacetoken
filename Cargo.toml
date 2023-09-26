@@ -12,3 +12,7 @@ categories = ["parsing"]
 
 [dependencies]
 logos = "0.13"
+
+[features]
+default = ["parser"]
+parser = []
