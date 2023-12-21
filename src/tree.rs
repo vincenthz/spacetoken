@@ -1,4 +1,6 @@
 use super::token::*;
+use alloc::string::String;
+use alloc::{vec, vec::Vec};
 use logos::Logos;
 
 /// Literal enumeration of Number, String
@@ -119,14 +121,14 @@ macro_rules! push_or_emit_err {
 impl<'a> TreeIterator<'a> {
     fn advance_err(&mut self) -> Error {
         let mut swap = None;
-        std::mem::swap(&mut swap, &mut self.current_token);
+        core::mem::swap(&mut swap, &mut self.current_token);
         let (_, r) = swap.expect("current token is here");
         r.err().expect("current token is an error")
     }
 
     fn advance(&mut self) -> Token {
         let mut swap = None;
-        std::mem::swap(&mut swap, &mut self.current_token);
+        core::mem::swap(&mut swap, &mut self.current_token);
         let (_, r) = swap.expect("current token is here");
         r.ok().expect("current token is a token")
     }
@@ -138,7 +140,7 @@ impl<'a> TreeIterator<'a> {
         // otherwise we create our first queue
         if let Some(tokens) = &mut self.tokens {
             let mut new_vec = vec![];
-            std::mem::swap(&mut new_vec, tokens);
+            core::mem::swap(&mut new_vec, tokens);
             self.stack.push(new_vec);
         } else {
             self.tokens = Some(vec![]);
@@ -163,7 +165,7 @@ impl<'a> TreeIterator<'a> {
                     // level 1 of grouping
                     None => {
                         let mut swap = None;
-                        std::mem::swap(&mut swap, &mut self.tokens);
+                        core::mem::swap(&mut swap, &mut self.tokens);
                         if let Some(tokens) = swap {
                             Ok(SpannedTree {
                                 span: pos,
@@ -177,7 +179,7 @@ impl<'a> TreeIterator<'a> {
                     // level 2 and greater of grouping
                     Some(mut st) => {
                         if let Some(tokens) = &mut self.tokens {
-                            std::mem::swap(&mut st, tokens);
+                            core::mem::swap(&mut st, tokens);
                             Ok(SpannedTree {
                                 span: pos,
                                 token: TokenTree::Group(delim, st),
@@ -293,8 +295,8 @@ impl<'a> Iterator for TreeIterator<'a> {
 }
 
 fn mk_previous_punct(
-    previous_punct: &mut Option<(char, std::ops::Range<usize>)>,
-    tok: Option<(&std::ops::Range<usize>, &Token)>,
+    previous_punct: &mut Option<(char, core::ops::Range<usize>)>,
+    tok: Option<(&core::ops::Range<usize>, &Token)>,
 ) -> Option<SpannedTree> {
     if let Some((prev_punct, prev_pos)) = previous_punct.as_ref() {
         let emit = match tok {
@@ -322,6 +324,7 @@ fn mk_previous_punct(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use alloc::string::ToString;
 
     fn spanned_tree_no_pos(tree: SpannedTree) -> TokenTree {
         match tree.token {
@@ -486,7 +489,6 @@ mod tests {
                 ])
             ]
         );
-        println!("x");
         test_tree!(
             "# xy abc = 123 + (group ! [])",
             &[

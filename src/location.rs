@@ -1,4 +1,5 @@
-use std::{fmt, num::NonZeroUsize};
+use alloc::vec::Vec;
+use core::{fmt, num::NonZeroUsize};
 
 /// Mapping of lines in a UTF-8 data stream
 ///
@@ -84,7 +85,7 @@ impl PartialOrd for LineCol {
 }
 
 impl Ord for LineCol {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
         match self.line.cmp(&other.line) {
             core::cmp::Ordering::Equal => {}
             ord => return ord,

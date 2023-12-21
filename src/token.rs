@@ -1,6 +1,7 @@
+use alloc::string::{String, ToString};
+use core::fmt;
 pub use logos::Lexer;
 use logos::Logos;
-use std::fmt;
 
 /// Integral Number of any precision in base
 ///
@@ -141,7 +142,6 @@ impl Number {
             .find(|c| *c != '_' && !c.is_ascii_digit())
             .is_some()
         {
-            println!("X");
             return None;
         }
         Some(Self {
@@ -228,7 +228,7 @@ fn quoted_string(lex: &mut Lexer<Token>) -> Option<String> {
         i += 1
     }
     lex.bump(i + 1);
-    Some(std::str::from_utf8(&slice[0..i]).unwrap().to_string())
+    Some(core::str::from_utf8(&slice[0..i]).unwrap().to_string())
 }
 
 fn group_start(lex: &mut Lexer<Token>) -> Option<GroupDelim> {

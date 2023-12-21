@@ -1,6 +1,9 @@
 //! Simple proc-macro like tokenizer
 
+#![no_std]
 #![deny(missing_docs)]
+
+extern crate alloc;
 
 mod location;
 mod token;
