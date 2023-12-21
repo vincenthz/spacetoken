@@ -5,7 +5,10 @@ use crate::location;
 use super::token::*;
 use super::tree::*;
 
-use std::sync::Arc;
+use alloc::format;
+use alloc::string::String;
+use alloc::vec::Vec;
+use alloc::{boxed::Box, rc::Rc};
 
 /// Type of errors
 #[derive(Debug, Clone)]
@@ -130,7 +133,7 @@ impl ParseError {
 /// multiple parsing options
 #[derive(Clone)]
 pub struct Parser {
-    trees: Arc<Vec<SpannedTree>>,
+    trees: Rc<Vec<SpannedTree>>,
     pos: usize,
 }
 
@@ -138,7 +141,7 @@ impl Parser {
     /// create a new parser from a stream
     pub fn new(trees: Vec<SpannedTree>) -> Self {
         Self {
-            trees: Arc::new(trees),
+            trees: Rc::new(trees),
             pos: 0,
         }
     }
