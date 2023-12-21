@@ -55,10 +55,24 @@ impl LineMap {
     }
 
     /// Try to resolve a byte offset into a `LineCol` through the LineMap
-    pub fn find(&self, ofs: usize) -> Option<LineCol> {
+    pub fn find_byte(&self, ofs: usize) -> Option<LineCol> {
         if let Some((line, line_ofs)) = self.find_nearest_offset_lesser_or_equal(ofs) {
             let col = ofs - line_ofs;
             Some(LineCol { line, column: col })
+        } else {
+            None
+        }
+    }
+
+    /// Try to resolve a byte offset into a `LineCol` through the LineMap
+    pub fn span(&self, ofs: core::ops::Range<usize>) -> Option<Span> {
+        // TODO optimise ..
+        if let Some(start) = self.find_byte(ofs.start) {
+            if let Some(end) = self.find_byte(ofs.end) {
+                Some(Span { start, end })
+            } else {
+                None
+            }
         } else {
             None
         }

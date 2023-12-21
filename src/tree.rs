@@ -39,6 +39,21 @@ pub struct SpannedTree {
     pub token: TokenTree,
 }
 
+/// Token Kind
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum TokenKind {
+    /// Identifier
+    Ident,
+    /// Literal
+    Literal,
+    /// Punctuation
+    Punct,
+    /// Comment
+    Comment,
+    /// Group of Token with group Delimiter () [] or {}
+    Group,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 /// Token Tree
 pub enum TokenTree {
@@ -52,6 +67,19 @@ pub enum TokenTree {
     Comment(String),
     /// Group of Token with group Delimiter () [] or {}
     Group(GroupDelim, Vec<SpannedTree>),
+}
+
+impl TokenTree {
+    /// Get the Token kind of a Token Tree
+    pub fn kind(&self) -> TokenKind {
+        match self {
+            TokenTree::Ident(_) => TokenKind::Ident,
+            TokenTree::Literal(_) => TokenKind::Literal,
+            TokenTree::Punct(_, _) => TokenKind::Punct,
+            TokenTree::Comment(_) => TokenKind::Comment,
+            TokenTree::Group(_, _) => TokenKind::Group,
+        }
+    }
 }
 
 /// Provide access to a stream of `TokenTree` from the source lexer
@@ -80,7 +108,9 @@ impl<'a> TreeStream<'a> {
     }
 }
 
-type Position = core::ops::Range<usize>;
+/// Position in the content (in bytes)
+pub type Position = core::ops::Range<usize>;
+
 type Error = ();
 
 /// A `TokenTree` iterator from a `TokenStream`
