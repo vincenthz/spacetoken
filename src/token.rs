@@ -294,13 +294,13 @@ pub struct Parameters {}
 /// use logos::Logos;
 /// use spacetoken::Token;
 ///
-/// let mut lex = Token::lex("my content");
+/// let mut lex = Token::lexer("my content");
 /// let first = lex.next().expect("has first");
 /// let second = lex.next().expect("has second");
 /// assert!(lex.next().is_none(), "stream is finished");
 ///
-/// assert_eq!(first, Token::Ident("my".to_string()));
-/// assert_eq!(second, Token::Ident("content".to_string()));
+/// assert_eq!(first, Ok(Token::Ident("my".to_string())));
+/// assert_eq!(second, Ok(Token::Ident("content".to_string())));
 ///
 /// ```
 pub enum Token {
